@@ -28,12 +28,12 @@ if (days_back > 0)
     rollback_period = good_date == good_date
 }
 
-rollback_period
-
 daily_count = target_set$RESULT_SET[rollback_period]
 date = good_date[rollback_period]
 
-#ploting graphs
+# calculation
+
+# ploting graphs
 windows()
 xyplot(daily_count ~ date, data = target_set, pch = 1, xlab = "Date", ylab = "Count")
 windows()
