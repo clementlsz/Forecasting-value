@@ -28,7 +28,7 @@ if (days_back > 0)
     rollback_period = good_date == good_date
 }
 
-rollback_period
+#rollback_period
 
 daily_count = target_set$RESULT_SET[rollback_period]
 date = good_date[rollback_period]
