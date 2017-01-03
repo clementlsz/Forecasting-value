@@ -31,7 +31,7 @@ if (days_back > 0)
 daily_count = target_set$RESULT_SET[rollback_period]
 date = good_date[rollback_period]
 
-# calculation
+## calculation
 
 # ploting graphs
 windows()
