@@ -7,6 +7,7 @@
 #### code ####
 library(lattice)
 library(datasets)
+library(moments)
 # Reading the data
 raw_data = read.csv("dv test.csv", header = TRUE)
 
@@ -17,7 +18,7 @@ target_set = raw_data[x,]
 
 # setting the rolling back date period
 # set the most recent number of days, 0 means for all days
-days_back = 160
+days_back = 165
 good_date = as.Date(target_set$DATE_COL,format = "%m/%d/%Y")
 
 if (days_back > 0)
@@ -32,9 +33,11 @@ daily_count = target_set$RESULT_SET[rollback_period]
 date = good_date[rollback_period]
 
 # calculation
+kurtosis(daily_count)
+
 
 # ploting graphs
 windows()
 xyplot(daily_count ~ date, data = target_set, pch = 1, xlab = "Date", ylab = "Count")
 windows()
-hist(daily_count)
+plot(density(daily_count))
