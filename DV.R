@@ -22,7 +22,7 @@ target_set = raw_data[x,]
 
 # setting the rolling back date period
 # set the most recent number of days, 0 means for all days
-days_back = 300
+days_back = 150
 good_date = as.Date(target_set$DATE_COL,format = "%m/%d/%Y")
 
 if (days_back > 0)
@@ -43,7 +43,7 @@ date = good_date[recent_days]
 # create index vector, for split
 index = length(daily_count) : 1
 # set it to every 7 data points, program runs once per week
-rollback_period = 30
+rollback_period = 7
 interval = ceiling(index/rollback_period)
 split(daily_count,interval)
 split(date,interval)
@@ -68,4 +68,3 @@ boxplot(daily_count)
 ## histogram ##
 windows()
 hist(daily_count)
-
