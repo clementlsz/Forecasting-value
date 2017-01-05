@@ -8,36 +8,50 @@
 library(lattice)
 library(datasets)
 library(moments)
-# Reading the data
+
+#### Reading the data ####
 raw_data = read.csv("dv test.csv", header = TRUE)
 
-# isoldate the value with the desire table name
+#### isoldate the values with table name and date ####
 target_table = "NOAA_WATER_SUPPLY_FORECAST"
 x = raw_data$TABLE_NAME == target_table
 target_set = raw_data[x,]
 
 # setting the rolling back date period
 # set the most recent number of days, 0 means for all days
-days_back = 165
+days_back = 0
 good_date = as.Date(target_set$DATE_COL,format = "%m/%d/%Y")
 
 if (days_back > 0)
 {
-    rollback_period = good_date >= max(good_date) - days_back
+    recent_days = good_date >= max(good_date) - days_back
 } else
 {
-    rollback_period = good_date == good_date
+    recent_days = good_date == good_date
 }
 
-daily_count = target_set$RESULT_SET[rollback_period]
-date = good_date[rollback_period]
+daily_count = target_set$RESULT_SET[recent_days]
+date = good_date[recent_days]
 
-# calculation
-kurtosis(daily_count)
-
-
-# ploting graphs
+#### ploting graphs ####
 windows()
-xyplot(daily_count ~ date, data = target_set, pch = 1, xlab = "Date", ylab = "Count")
+# xyplot(daily_count ~ date, data = target_set, pch = 1, xlab = "Date", ylab = "Count")
+
+## ploting chart ##
+plot(date, daily_count, col = "blue", pch = 20)
+## ploting linear line ##
+fit = lm(daily_count ~ date)
+abline(fit, col = "red")
+## boxplot ##
 windows()
-plot(density(daily_count))
+boxplot.stats(daily_count)$out
+boxplot(daily_count)
+## histogram ##
+windows()
+hist(daily_count)
+
+
+#### Analysis ####
+#kurtosis(daily_count)
+rollback_period = 7 #set it to every 7 data points, program runs once per week
+df = data.frame(date, daily_count)
