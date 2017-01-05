@@ -34,10 +34,10 @@ daily_count = target_set$RESULT_SET[recent_days]
 date = good_date[recent_days]
 
 #### ploting graphs ####
-windows()
-# xyplot(daily_count ~ date, data = target_set, pch = 1, xlab = "Date", ylab = "Count")
 
+# xyplot(daily_count ~ date, data = target_set, pch = 1, xlab = "Date", ylab = "Count")
 ## ploting chart ##
+windows()
 plot(date, daily_count, col = "blue", pch = 20)
 ## ploting linear line ##
 fit = lm(daily_count ~ date)
