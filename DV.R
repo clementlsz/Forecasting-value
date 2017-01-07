@@ -6,11 +6,13 @@
 
 ## work directory ##
 #setwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
+#setwd("C:/Users/User/Desktop/DV")
 
 #### code ####
 
 library(lattice)
 library(datasets)
+library(moments)
 
 source("consistency_rate.R")
 
