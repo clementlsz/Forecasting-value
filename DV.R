@@ -1,8 +1,8 @@
 #### Notes ####
 #### system reads Date_Col as character, need to convert to date first, Otherwise plotting is incorrect ####
 #windows()
-#xyplot(tail(target_set$RESULT_SET,1000) ~ tail(target_set$DATE_COL,1000), data = target_set, pch = 1, xlab = "Date", ylab = "Count")
-#sort(as.Date(target_set$DATE_COL,format = "%m/%d/%Y"))
+#xyplot(tail(target_data$RESULT_SET,1000) ~ tail(target_data$DATE_COL,1000), data = target_data, pch = 1, xlab = "Date", ylab = "Count")
+#sort(as.Date(target_data$DATE_COL,format = "%m/%d/%Y"))
 
 ## work directory ##
 #setwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
@@ -24,14 +24,16 @@ raw_data = read.csv("dv test.csv", header = TRUE)
 
 #### isoldate the values with table name and date ####
 
-target_table = "WSI_WC_ISO_AGGR_WIND_FORE"
+target_table = "AS_MKTGOALS_MW_A"
+#WSI_WC_ISO_AGGR_WIND_FORE
+
 x = raw_data$TABLE_NAME == target_table
-target_set = raw_data[x,]
+target_data = raw_data[x,]
 
 # setting the rolling back date period
 # set the most recent number of days, 0 means for all days
-days_back = 180
-good_date = as.Date(target_set$DATE_COL,format = "%m/%d/%Y")
+days_back = 0
+good_date = as.Date(target_data$DATE_COL,format = "%m/%d/%Y")
 
 if (days_back > 0)
 {
@@ -41,7 +43,7 @@ if (days_back > 0)
     recent_days = good_date == good_date
 }
 
-daily_count = target_set$RESULT_SET[recent_days]
+daily_count = target_data$RESULT_SET[recent_days]
 date = good_date[recent_days]
 
 #### Analysis ####
@@ -64,7 +66,7 @@ interval_date_r = as.Date(sapply(date_s, median),origin = "1970-01-01")
 
 mean(interval_count_r[2,])
 sd(interval_count_r[2,])
-
+skewness(interval_count_r[2,])
 
 #### ploting graphs for daily row count ####
 
@@ -81,8 +83,9 @@ par(mfrow = c(2,1))
 # finding outliers
 #boxplot.stats(daily_count)$out
 boxplot(daily_count, main = "Daily Count")
-hist(daily_count, main="", prob = TRUE, col = "grey", lwd = 2, ylim = c(0,max(density(daily_count)$y)))
+hist(daily_count, main="", fre = FALSE, col = "grey", lwd = 2, ylim = c(0,max(density(daily_count)$y)))
 lines(density(daily_count), main = "Daily Count", col = "blue", lwd = 2)
+
 
 #### ploting graphs for interval analysis ###
 
@@ -94,7 +97,7 @@ lines(density(daily_count), main = "Daily Count", col = "blue", lwd = 2)
 # histogram and scatter#
 windows()
 par(mfrow = c(2,1))
-hist(interval_count_r[2,], main = "Interval Rate", fre = FALSE, col = "grey", lwd = 2, xlab = "Consistency Rate", ylim = c(0,10))
+hist(interval_count_r[2,], main = "Interval Rate", fre = FALSE, col = "grey", lwd = 2, xlab = "Consistency Rate")
 lines(density(interval_count_r[2,]), col = "blue", lwd = 2)
 
 plot(interval_date_r, interval_count_r[2,], col = "blue", pch = 20, ylab = "Consistency Rate", xlab = "date")
