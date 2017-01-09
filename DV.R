@@ -1,8 +1,8 @@
 #### Notes ####
 #### system reads Date_Col as character, need to convert to date first, Otherwise plotting is incorrect ####
 #windows()
-#xyplot(tail(target_set$RESULT_SET,1000) ~ tail(target_set$DATE_COL,1000), data = target_set, pch = 1, xlab = "Date", ylab = "Count")
-#sort(as.Date(target_set$DATE_COL,format = "%m/%d/%Y"))
+#xyplot(tail(target_data$RESULT_SET,1000) ~ tail(target_data$DATE_COL,1000), data = target_data, pch = 1, xlab = "Date", ylab = "Count")
+#sort(as.Date(target_data$DATE_COL,format = "%m/%d/%Y"))
 
 ## work directory ##
 #setwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
@@ -28,12 +28,12 @@ target_table = "AS_MKTGOALS_MW_A"
 #WSI_WC_ISO_AGGR_WIND_FORE
 
 x = raw_data$TABLE_NAME == target_table
-target_set = raw_data[x,]
+target_data = raw_data[x,]
 
 # setting the rolling back date period
 # set the most recent number of days, 0 means for all days
 days_back = 0
-good_date = as.Date(target_set$DATE_COL,format = "%m/%d/%Y")
+good_date = as.Date(target_data$DATE_COL,format = "%m/%d/%Y")
 
 if (days_back > 0)
 {
@@ -43,7 +43,7 @@ if (days_back > 0)
     recent_days = good_date == good_date
 }
 
-daily_count = target_set$RESULT_SET[recent_days]
+daily_count = target_data$RESULT_SET[recent_days]
 date = good_date[recent_days]
 
 #### Analysis ####
