@@ -16,7 +16,6 @@ library(moments)
 
 source("consistency_rate.R")
 
-
 #### Reading the data ####
 
 raw_data = read.csv("dv test.csv", header = TRUE)
@@ -24,7 +23,7 @@ raw_data = read.csv("dv test.csv", header = TRUE)
 
 #### isoldate the values with table name and date ####
 
-target_table = "AS_MKTGOALS_MW_A"
+target_table = "NYMEX_OPTIONS"
 #WSI_WC_ISO_AGGR_WIND_FORE
 
 x = raw_data$TABLE_NAME == target_table
