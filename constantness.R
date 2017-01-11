@@ -3,6 +3,8 @@
 #### spliting the data set into intervals ####
 constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, interval_plot = FALSE) {
     source("consistency_rate.R")
+    constant_value = FALSE
+    message = ""
     
     daily_count = input_list$daily_count
     date = input_list$date
@@ -17,7 +19,24 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
     date_s = split(date,interval)
     interval_date_r = as.Date(sapply(date_s, median),origin = "1970-01-01")
     
-    #### ploting graphs for interval analysis ###
+    consistency_mean = mean(interval_count_r[2,])
+    consistency_std = sd(interval_count_r[2,])
+    consistency_median = median(interval_count_r[2,])
+    consistency_skewness = skewness(interval_count_r[2,])
+
+    # Making Decisions #
+     if (is.nan(consistency_skewness)) {
+         if (consistency_mean == 1) {
+             constant_value = TRUE
+         } else if (consistency_mean > 0.5) {
+             constant_value = TRUE
+             message = paste(consistency_mean * 100,"% of consistency, please check source", sep = "")
+         } else {
+             constant_value = FALSE
+         }
+     }
+
+#### ploting graphs for interval analysis ###
     
     # histogram and scatter #
     if (isTRUE(hist_scat)) {
@@ -40,7 +59,7 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
         #xyplot(daily_count ~ date | interval, data = splitted_dataset, pch = 1, xlab = "Date", ylab = "Count")
     }
     
-    result = c(mean(interval_count_r[2,]),sd(interval_count_r[2,]),median(interval_count_r[2,]),skewness(interval_count_r[2,]))
+    result = c(consistency_mean, consistency_std, consistency_median, consistency_skewness)
     names(result) = c("mean","std", "median", "skewness")
     return(result)
 }
