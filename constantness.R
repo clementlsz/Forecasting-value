@@ -2,6 +2,7 @@
 #### Our primary goal is to check whether the distribution is a flat line or not ####
 #### spliting the data set into intervals ####
 constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, interval_plot = FALSE) {
+    
     source("consistency_rate.R")
     constant_value = FALSE
     message = ""
@@ -19,6 +20,8 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
     date_s = split(date,interval)
     interval_date_r = as.Date(sapply(date_s, median),origin = "1970-01-01")
     
+    consistency_min = min(interval_count_r[2,])
+    consistency_max = max(interval_count_r[2,])
     consistency_mean = mean(interval_count_r[2,])
     consistency_std = sd(interval_count_r[2,])
     consistency_median = median(interval_count_r[2,])
@@ -54,12 +57,12 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
     
     # plot divided into intervals #
     if (isTRUE(interval_plot)) {
-        #splitted_dataset = data.frame(date, daily_count, interval)
-        #windows()
-        #xyplot(daily_count ~ date | interval, data = splitted_dataset, pch = 1, xlab = "Date", ylab = "Count")
+        splitted_dataset = data.frame(date, daily_count, interval)
+        windows()
+        print(xyplot(daily_count ~ date | interval, data = splitted_dataset, pch = 1, xlab = "Date", ylab = "Count"))
     }
     
-    result = c(consistency_mean, consistency_std, consistency_median, consistency_skewness)
-    names(result) = c("mean","std", "median", "skewness")
+    result = c(consistency_min, consistency_max, consistency_mean, consistency_std, consistency_median, consistency_skewness)
+    names(result) = c("min", "max", "mean", "std", "median", "skewness")
     return(result)
 }
