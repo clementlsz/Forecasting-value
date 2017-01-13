@@ -1,11 +1,11 @@
 #### We are dividing the table into small intervals, find out the pattern in each interval and consolidate all the results to check the overall pattern ####
 #### Our primary goal is to check whether the distribution is a flat line or not ####
 #### spliting the data set into intervals ####
-constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, interval_plot = FALSE) {
+constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, interval_plot = FALSE, show_stat = FALSE) {
     
     source("consistency_rate.R")
-    constant_value = FALSE
-    message = ""
+    constant_value = NA
+    consistency_message = ""
     
     daily_count = input_list$daily_count
     date = input_list$date
@@ -29,15 +29,36 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
 
     # Making Decisions #
      if (is.nan(consistency_skewness)) {
+         # There is an unique consistency rate
          if (consistency_mean == 1) {
              constant_value = TRUE
          } else if (consistency_mean > 0.5) {
-             constant_value = TRUE
-             message = paste(consistency_mean * 100,"% of consistency, please check source", sep = "")
+             constant_value = NA
+             consistency_message = paste(consistency_mean * 100,"% of consistency, undetermined", sep = "")
          } else {
              constant_value = FALSE
          }
-     }
+     } else {
+         # There is more than one consistency rate
+         if (consistency_skewness > 0) {
+             if (consistency_min > 0.5) {
+                 constant_value = NA
+                 consistency_message = "undetermined"
+             } else {
+                 constant_value = FALSE
+             } 
+         } else if (-0.1 < consistency_skewness && consistency_skewness < 0) {
+                 constant_value = NA
+                 consistency_message = "undetermined"
+         } else {
+                 if (consistency_max == 1) {
+                     constant_value = TRUE
+                 } else {
+                     constant_value = NA
+                     consistency_message = "undetermined"
+                 }
+             }
+         }
 
 #### ploting graphs for interval analysis ###
     
@@ -62,7 +83,13 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
         print(xyplot(daily_count ~ date | interval, data = splitted_dataset, pch = 1, xlab = "Date", ylab = "Count"))
     }
     
-    result = c(consistency_min, consistency_max, consistency_mean, consistency_std, consistency_median, consistency_skewness)
-    names(result) = c("min", "max", "mean", "std", "median", "skewness")
+    stat = c(consistency_min, consistency_max, consistency_mean, consistency_std, consistency_median, consistency_skewness)
+    names(stat) = c("min", "max", "mean", "std", "median", "skewness")
+    if (isTRUE(show_stat)){
+        print(stat)
+    }
+    
+    result = c(constant_value,consistency_message)
+    names(result) = c("constant value", "consistency message")
     return(result)
 }

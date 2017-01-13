@@ -17,12 +17,12 @@ raw_data = read.csv("dv test.csv", header = TRUE)
 #### create control variables ####
 const_para = list()
 # if target table is not specified, it will loop through all the tables
-target_table = "PJM_EDF_INSTANT_LOAD_ZONE" 
+target_table = "" 
 #NYMEX_OPTIONS
 #WSI_WC_ISO_AGGR_WIND_FORE
 
 # setting the rolling back date period, 0 means all the days
-days_back = 180
+days_back = 360
 
 if (target_table != "") {
 #### working on a single table ####
@@ -48,7 +48,7 @@ if (target_table != "") {
 # Analysis #
     
     # identify whether a table displays constant row count pattern #
-    const_para = constantness(input_list, hist_scat = TRUE, interval_plot = FALSE)
+    const_para = constantness(input_list, hist_scat = TRUE, interval_plot = FALSE,show_stat = TRUE)
     const_para = list(const_para)
     names(const_para) = target_table
     
@@ -102,8 +102,8 @@ if (target_table != "") {
         
         j = j + 1
         
-         windows()
-         plot(date, daily_count, col = "blue", pch = 20, main = i)
+          windows()
+          plot(date, daily_count, col = "blue", pch = 20, main = i)
     }
 }
 const_para
