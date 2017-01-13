@@ -6,6 +6,7 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
     source("consistency_rate.R")
     constant_value = NA
     consistency_message = ""
+    expected_constant_value = NA
     
     daily_count = input_list$daily_count
     date = input_list$date
@@ -49,13 +50,13 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
              } 
          } else if (-0.1 < consistency_skewness && consistency_skewness < 0) {
                  constant_value = NA
-                 consistency_message = "undetermined"
+                 consistency_message = "Table is likely to have a constantness pattern"
          } else {
                  if (consistency_max == 1) {
                      constant_value = TRUE
                  } else {
                      constant_value = NA
-                     consistency_message = "undetermined"
+                     consistency_message = "Table is likely to have a constantness pattern"
                  }
              }
          }
