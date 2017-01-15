@@ -4,9 +4,10 @@
 constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, interval_plot = FALSE, show_stat = FALSE) {
     
     source("consistency_rate.R")
-    constant_value = NA
+    is_constant = NA
     consistency_message = ""
     expected_constant_value = NA
+    interval_num = NA
     
     daily_count = input_list$daily_count
     date = input_list$date
@@ -32,34 +33,48 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
      if (is.nan(consistency_skewness)) {
          # There is an unique consistency rate
          if (consistency_mean == 1) {
-             constant_value = TRUE
+             is_constant = TRUE
          } else if (consistency_mean > 0.5) {
-             constant_value = NA
+             is_constant = NA
              consistency_message = paste(consistency_mean * 100,"% of consistency, undetermined", sep = "")
          } else {
-             constant_value = FALSE
+             is_constant = FALSE
          }
      } else {
          # There is more than one consistency rate
          if (consistency_skewness > 0) {
              if (consistency_min > 0.5) {
-                 constant_value = NA
+                 is_constant = NA
                  consistency_message = "undetermined"
              } else {
-                 constant_value = FALSE
+                 is_constant = FALSE
              } 
          } else if (-0.1 < consistency_skewness && consistency_skewness < 0) {
-                 constant_value = NA
+                 is_constant = NA
                  consistency_message = "Table is likely to have a constantness pattern"
          } else {
                  if (consistency_max == 1) {
-                     constant_value = TRUE
+                     is_constant = TRUE
                  } else {
-                     constant_value = NA
+                     is_constant = NA
                      consistency_message = "Table is likely to have a constantness pattern"
                  }
              }
-         }
+     }
+    
+    # Calculating the expected row count #
+        if (isTRUE(is_constant) | is.na(is_constant)) {
+            #print("in")
+            # find the most recent repeated value
+            for (n in 1:dim(interval_count_r)[2]) {
+                if (interval_count_r[2,n] > 0.5) {
+                    expected_constant_value = interval_count_r[[1,n]]
+                    interval_num = n
+                    break
+                }
+            }
+        }
+        #print(expected_constant_value)
 
 #### ploting graphs for interval analysis ###
     
@@ -90,7 +105,7 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
         print(stat)
     }
     
-    result = c(constant_value,consistency_message)
-    names(result) = c("constant value", "consistency message")
+    result = c(expected_constant_value, interval_num, is_constant,consistency_message)
+    names(result) = c("expected constant value","interval num","is constant?", "consistency message")
     return(result)
 }
