@@ -1,6 +1,6 @@
 #### set work directory ####
-setwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
-#setwd("C:/Users/User/Desktop/DV")
+#etwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
+setwd("C:/Users/User/Desktop/DV")
 rm(list=ls())
 
 #### code ####
@@ -60,6 +60,7 @@ if (target_table != "") {
     # plotting linear line
     fit = lm(daily_count ~ date)
     abline(fit, col = "red")
+    #abline(h = const_para[[1]][["expected constant value"]], col = "green")
     
     # boxplot and histogram
     windows()
@@ -102,9 +103,10 @@ if (target_table != "") {
         
         j = j + 1
         
-          windows()
-          plot(date, daily_count, col = "blue", pch = 20, main = i)
+        windows()
+        plot(date, daily_count, col = "blue", pch = 20, main = i)
+        abline(h = const_para[[i]][["expected constant value"]], col = "green")
     }
 }
-const_para
+const_para[[1]][["expected constant value"]]
 
