@@ -1,6 +1,6 @@
 #### set work directory ####
-#etwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
-setwd("C:/Users/User/Desktop/DV")
+setwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
+#setwd("C:/Users/User/Desktop/DV")
 rm(list=ls())
 
 #### code ####
@@ -108,5 +108,5 @@ if (target_table != "") {
         abline(h = const_para[[i]][["expected constant value"]], col = "green")
     }
 }
-const_para[[1]][["expected constant value"]]
+const_para
 
