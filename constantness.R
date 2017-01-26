@@ -43,7 +43,7 @@ constantness = function (input_list, rollback_period = 7, hist_scat = FALSE, int
      } else {
          # There is more than one consistency rate
          if (consistency_skewness > 0) {
-             if (consistency_min > 0.5) {
+             if (consistency_min > 0.5 | (consistency_mean > 0.5 & consistency_median > 0.5)) {
                  is_constant = NA
                  consistency_message = "undetermined"
              } else {

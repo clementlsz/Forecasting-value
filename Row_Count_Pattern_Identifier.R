@@ -17,12 +17,13 @@ raw_data = read.csv("dv test.csv", header = TRUE)
 #### create control variables ####
 const_para = list()
 # if target table is not specified, it will loop through all the tables
-target_table = "" 
+target_table = "PJM_EDF_INSTANT_LOAD_ZONE" 
 #NYMEX_OPTIONS
 #WSI_WC_ISO_AGGR_WIND_FORE
+#PJM_EDF_INSTANT_LOAD_ZONE
 
 # setting the rolling back date period, 0 means all the days
-days_back = 360
+days_back = 365
 
 if (target_table != "") {
 #### working on a single table ####
@@ -60,7 +61,7 @@ if (target_table != "") {
     # plotting linear line
     fit = lm(daily_count ~ date)
     abline(fit, col = "red")
-    #abline(h = const_para[[1]][["expected constant value"]], col = "green")
+    abline(h = const_para[[1]][["expected constant value"]], col = "green")
     
     # boxplot and histogram
     windows()
