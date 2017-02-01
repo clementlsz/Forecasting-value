@@ -42,21 +42,20 @@ if (days_back > 0)
 daily_count_ts = ts(daily_count, frequency = 7)
 #daily_count_ts_root = ts(sqrt(daily_count), frequency = 7)
 
-daily_count_d = diff(daily_count_ts)
+daily_count_d = diff(daily_count_ts, lag = 1)
 fit1 = auto.arima(daily_count_ts, trace = TRUE, test = "kpss", ic = "aic")
+
+arima_p = fit1$arma[1]
+arima_q = fit1$arma[2]
+arima_P = fit1$arma[3]
+arima_Q = fit1$arma[4]
+arima_seasonal = fit1$arma[5]
+arima_d = fit1$arma[6]
+arima_D = fit1$arma[7]
+
 Box.test(fit1$residuals^2,lag = 7, type = "Ljung-Box")
 
-p = fit1$arma[1]
-q = fit1$arma[2]
-P = fit1$arma[3]
-Q = fit1$arma[4]
-seasonal = fit1$arma[5]
-d = fit1$arma[6]
-D = fit1$arma[7]
 
-
-
-help(auto.arima)
 # a=adf.test(daily_count_ts_d, alternative = "stationary")
 # a
 
