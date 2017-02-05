@@ -1,6 +1,6 @@
 #### set work directory ####
-#etwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
-setwd("C:/Users/User/Desktop/DV")
+setwd("C:/Users/clement.liu/Desktop/DV Project/forecasting-value")
+#setwd("C:/Users/User/Desktop/DV")
 rm(list=ls())
 
 #### code ####
@@ -17,12 +17,13 @@ raw_data = read.csv("dv test.csv", header = TRUE)
 #### create control variables ####
 const_para = list()
 # if target table is not specified, it will loop through all the tables
-target_table = "" 
+target_table = "WSI_WC_ISO_AGGR_WIND_FORE" 
 #NYMEX_OPTIONS
 #WSI_WC_ISO_AGGR_WIND_FORE
+#PJM_EDF_INSTANT_LOAD_ZONE
 
 # setting the rolling back date period, 0 means all the days
-days_back = 360
+days_back = 365
 
 if (target_table != "") {
 #### working on a single table ####
@@ -48,7 +49,7 @@ if (target_table != "") {
 # Analysis #
     
     # identify whether a table displays constant row count pattern #
-    const_para = constantness(input_list, hist_scat = TRUE, interval_plot = FALSE,show_stat = TRUE)
+    const_para = constantness(input_list, hist_scat = FALSE, interval_plot = FALSE,show_stat = FALSE)
     const_para = list(const_para)
     names(const_para) = target_table
     
@@ -60,6 +61,7 @@ if (target_table != "") {
     # plotting linear line
     fit = lm(daily_count ~ date)
     abline(fit, col = "red")
+    # plot the expected daily constant row count
     #abline(h = const_para[[1]][["expected constant value"]], col = "green")
     
     # boxplot and histogram
@@ -108,5 +110,5 @@ if (target_table != "") {
         abline(h = const_para[[i]][["expected constant value"]], col = "green")
     }
 }
-const_para[[1]][["expected constant value"]]
+const_para
 
